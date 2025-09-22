@@ -13,14 +13,12 @@ router.post('/', async (req, res) => {
 
     const data = await db.query("SELECT * FROM ingredient WHERE ingredientname = $1;", [ingredientname]);
 
-    console.log(data.rows);
     if(data.rows.length !== 0) {
         res.json({message: "ingredient already exists"});
     } else {
 
         try {
             const result = await db.query("INSERT INTO ingredient (ingredientname) VALUES ($1);", [ingredientname]);
-            console.log(result.rowCount);
             res.status(200).json({message: `${result.rowCount} row was added.`});
         }
         catch(error) {

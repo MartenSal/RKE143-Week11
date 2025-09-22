@@ -12,14 +12,12 @@ router.post('/', async (req, res) => {
 
     const data = await db.query("SELECT * FROM recipe WHERE recipename = $1;", [recipename]);
 
-    console.log(data.rows);
     if(data.rows.length !== 0) {
         res.json({message: "recipe already exists"});
     } else {
 
         try {
             const result = await db.query("INSERT INTO recipe (recipename) VALUES ($1);", [recipename]);
-            console.log(result.rowCount);
             res.status(200).json({message: `${result.rowCount} row was added.`});
         }
         catch(error) {
@@ -79,7 +77,6 @@ router.post('/addingredientinrecipe', async (req, res) => {
 
         try {
             const result = await db.query("INSERT INTO ingredientinrecipe (recipeid, ingredientid) SELECT a.id, b.id FROM recipe a JOIN ingredient b ON a.recipeName = $1 AND b.ingredientname = $2;", [recipename, ingredientname]);
-            console.log(result.rowCount);
             res.status(200).json({message: `${result.rowCount} row was added.`});
         }
         catch(error) {
